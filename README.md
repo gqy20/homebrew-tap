@@ -4,11 +4,9 @@
 
 ## 安装
 
-当前 `zotcli` 还没有正式 release，先使用 `HEAD` 安装：
-
 ```bash
 brew tap gqy20/tap
-brew install gqy20/tap/zotcli --HEAD
+brew install zotcli
 ```
 
 安装完成后可执行：
@@ -29,9 +27,7 @@ zot
 
 ## 当前状态
 
-`Formula/zotcli.rb` 目前是 `head` formula，因为 `gqy20/zotero_cli` 还没有发布 GitHub Release。
-
-等第一个正式版本发布后，这个 tap 会切换到稳定安装方式。
+`zotcli` 已切换到正式 release（v0.0.1），使用预编译二进制文件安装。
 
 ## 维护说明
 

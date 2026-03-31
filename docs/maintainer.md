@@ -13,7 +13,7 @@ brew tap gqy20/tap /absolute/path/to/homebrew-tap
 从本地 tap 安装：
 
 ```bash
-brew install gqy20/tap/zotcli --HEAD
+brew install gqy20/tap/zotcli
 ```
 
 验证命令：
@@ -31,12 +31,12 @@ git push -u origin main
 
 ## 切换到正式 release
 
-当前 `zotcli` 使用的是 `head` formula。
+已完成。`zotcli` 已使用 v0.0.1 release 的预编译二进制文件。
 
-当 `gqy20/zotero_cli` 发布第一个 tag/release 后：
+后续升级时：
 
-1. 把 `Formula/zotcli.rb` 改成 release tarball 的 `url`
-2. 补上对应源码包的 `sha256`
+1. 获取新版本的 SHA256 checksum
+2. 更新 `Formula/zotcli.rb` 中的 `version` 和 `url`
 3. 提交并推送到这个 tap 仓库
 
 ## 面向用户的安装方式
