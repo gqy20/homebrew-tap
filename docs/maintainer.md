@@ -29,14 +29,20 @@ gh repo create gqy20/homebrew-tap --public --source . --remote origin
 git push -u origin main
 ```
 
-## 切换到正式 release
+## 正式 release 与自动更新
 
-已完成。`zotcli` 已使用 v0.0.1 release 的预编译二进制文件。
+已完成。`zotcli` 当前使用 `gqy20/zotero_cli` 正式 release 的预编译二进制文件。
 
-后续升级时：
+后续升级默认由 `gqy20/zotero_cli` 的 release workflow 自动完成：
+
+1. 在 `zotero_cli` 仓库推送新的 `v*` tag
+2. release workflow 发布 GitHub Release
+3. workflow 自动更新本仓库的 `Formula/zotcli.rb`
+
+如果自动化失效，再回退到手工流程：
 
 1. 获取新版本的 SHA256 checksum
-2. 更新 `Formula/zotcli.rb` 中的 `version` 和 `url`
+2. 更新 `Formula/zotcli.rb` 中的 `version`、`url` 和 `sha256`
 3. 提交并推送到这个 tap 仓库
 
 ## 面向用户的安装方式

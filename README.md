@@ -27,7 +27,9 @@ zot
 
 ## 当前状态
 
-`zotcli` 已切换到正式 release（v0.0.1），使用预编译二进制文件安装。
+`zotcli` 当前跟踪正式 release `v0.0.3`，使用预编译二进制文件安装。
+
+该 tap 现在由 `gqy20/zotero_cli` 的 release workflow 自动更新。
 
 ## 维护说明
 
