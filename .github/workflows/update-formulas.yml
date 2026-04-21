@@ -45,6 +45,7 @@ jobs:
       - name: Get latest release version
         id: latest_release
         env:
+          GH_TOKEN: ${{ github.token }}
           REPO: ${{ matrix.repo }}
         run: |
           LATEST=$(gh api "repos/$REPO/releases/latest" --jq '.tag_name')
