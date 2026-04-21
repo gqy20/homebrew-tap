@@ -6,31 +6,38 @@
 
 ```bash
 brew tap gqy20/tap
-brew install zotcli
-```
-
-安装完成后可执行：
-
-```bash
-zot
 ```
 
 ## 可用 Formula
 
+### `ms`
+
+MiniMax Studio CLI - AI video generation toolkit
+
+- 版本：`v0.1.0`
+- 安装后的命令：`ms`
+- 项目仓库：`https://github.com/gqy20/minimax-studio`
+
+安装命令：
+
+```bash
+brew install gqy20/tap/ms
+```
+
 ### `zotcli`
 
-面向终端、脚本和 AI agent 的 Zotero CLI。
+Zotero CLI for terminal, scripts, and AI agents
 
-- Homebrew 包名：`zotcli`
+- 版本：`v0.0.5`
 - 安装后的命令：`zot`
 - 项目仓库：`https://github.com/gqy20/zotero_cli`
 
-## 当前状态
+安装命令：
 
-`zotcli` 当前跟踪正式 release `v0.0.3`，使用预编译二进制文件安装。
-
-该 tap 现在由 `gqy20/zotero_cli` 的 release workflow 自动更新。
+```bash
+brew install gqy20/tap/zotcli
+```
 
 ## 维护说明
 
-维护和发布流程见 `docs/maintainer.md`。
+此 tap 由 GitHub Actions 自动更新。维护和发布流程见 `docs/maintainer.md`。

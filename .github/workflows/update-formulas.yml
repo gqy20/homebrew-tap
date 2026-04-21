@@ -1,0 +1,210 @@
+name: Update Formulas
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-formulas:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - formula: zotcli
+            class_name: Zotcli
+            repo: gqy20/zotero_cli
+            desc: "Zotero CLI for terminal, scripts, and AI agents"
+            homepage: "https://github.com/gqy20/zotero_cli"
+            license: MIT
+            binary: zot
+            test_match: "zot"
+            platforms: "darwin_amd64 darwin_arm64 linux_amd64 linux_arm64"
+
+          - formula: ms
+            class_name: Ms
+            repo: gqy20/minimax-studio
+            desc: "MiniMax Studio CLI - AI video generation toolkit"
+            homepage: "https://github.com/gqy20/minimax-studio"
+            license: MIT
+            binary: ms
+            test_match: "ms"
+            platforms: "darwin_amd64 darwin_arm64 linux_amd64 linux_arm64"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get latest release version
+        id: latest_release
+        env:
+          REPO: ${{ matrix.repo }}
+        run: |
+          LATEST=$(gh api "repos/$REPO/releases/latest" --jq '.tag_name')
+          echo "version=$LATEST" >> "$GITHUB_OUTPUT"
+          echo "Latest release for $REPO: $LATEST"
+
+      - name: Get current version from formula
+        id: current_version
+        run: |
+          CURRENT=$(grep -oP 'version "\K[^"]+' Formula/${{ matrix.formula }}.rb)
+          echo "version=$CURRENT" >> "$GITHUB_OUTPUT"
+          echo "Current version in ${{ matrix.formula }}.rb: $CURRENT"
+
+      - name: Skip if already up-to-date
+        if: steps.latest_release.outputs.version == steps.current_version.outputs.version
+        run: |
+          echo "::notice::${{ matrix.formula }} is already at latest version (${{ steps.latest_release.outputs.version }}). Skipping."
+
+      - name: Download checksums and update formula
+        if: steps.latest_release.outputs.version != steps.current_version.outputs.version
+        env:
+          NEW_VERSION: ${{ steps.latest_release.outputs.version }}
+          FORMULA: ${{ matrix.formula }}
+          CLASS_NAME: ${{ matrix.class_name }}
+          REPO: ${{ matrix.repo }}
+          DESC: ${{ matrix.desc }}
+          HOMEPAGE: ${{ matrix.homepage }}
+          LICENSE: ${{ matrix.license }}
+          BINARY: ${{ matrix.binary }}
+          TEST_MATCH: ${{ matrix.test_match }}
+          PLATFORMS: ${{ matrix.platforms }}
+        run: |
+          CHECKSUMS_URL="https://github.com/$REPO/releases/download/$NEW_VERSION/checksums.txt"
+          echo "Fetching checksums from $CHECKSUMS_URL"
+          curl -sL "$CHECKSUMS_URL" -o /tmp/checksums.txt
+
+          cat > "Formula/${FORMULA}.rb" <<RUBYEOF
+          class ${CLASS_NAME} < Formula
+            desc "${DESC}"
+            homepage "${HOMEPAGE}"
+            license "${LICENSE}"
+            version "${NEW_VERSION}"
+
+          RUBYEOF
+
+          for PLATFORM in $PLATFORMS; do
+            OS=$(echo "$PLATFORM" | cut -d_ -f1)
+            ARCH=$(echo "$PLATFORM" | cut -d_ -f2)
+
+            case "$OS" in
+              darwin) BLOCK="on_macos" ;;
+              linux)  BLOCK="on_linux" ;;
+            esac
+
+            case "$ARCH" in
+              amd64) SUBBLOCK="on_intel" ;;
+              arm64) SUBBLOCK="on_arm" ;;
+            esac
+
+            ASSET_NAME="${BINARY}_v${NEW_VERSION}_${OS}_${ARCH}.tar.gz"
+            ASSET_URL="https://github.com/$REPO/releases/download/$NEW_VERSION/$ASSET_NAME"
+
+            SHA256=$(awk -v name="$ASSET_NAME" '$2 == name {print $1}' /tmp/checksums.txt)
+
+            if [ -z "$SHA256" ]; then
+              echo "ERROR: Could not find checksum for $ASSET_NAME"
+              exit 1
+            fi
+
+            cat >> "Formula/${FORMULA}.rb" <<RUBYEOF
+            ${BLOCK} do
+              ${SUBBLOCK} do
+                url "${ASSET_URL}"
+                sha256 "${SHA256}"
+              end
+            end
+
+          RUBYEOF
+          done
+
+          cat >> "Formula/${FORMULA}.rb" <<RUBYEOF
+            def install
+              bin.install "${BINARY}"
+            end
+
+            test do
+              assert_match "${TEST_MATCH}", shell_output("\#{bin}/${BINARY} --help")
+            end
+          end
+          RUBYEOF
+
+          echo "Updated ${FORMULA}.rb to version ${NEW_VERSION}"
+
+      - name: Generate README.md
+        run: |
+          cat > README.md <<'HEADER'
+          # homebrew-tap
+
+          `gqy20` 的 Homebrew tap，用于分发命令行工具。
+
+          ## 安装
+
+          \`\`\`bash
+          brew tap gqy20/tap
+          \`\`\`
+
+          ## 可用 Formula
+
+          HEADER
+
+          for RB_FILE in Formula/*.rb; do
+            FNAME=$(basename "$RB_FILE" .rb)
+            DESC=$(grep -oP 'desc "\K[^"]+' "$RB_FILE")
+            VERSION=$(grep -oP 'version "\K[^"]+' "$RB_FILE")
+            HOMEPAGE=$(grep -oP 'homepage "\K[^"]+' "$RB_FILE")
+            BINARY=$(grep -oP 'bin.install "\K[^"]+' "$RB_FILE")
+
+            cat >> README.md <<FORMULAENTRY
+
+          ### \`${FNAME}\`
+
+          ${DESC}
+
+          - 版本：\`${VERSION}\`
+          - 安装后的命令：\`${BINARY}\`
+          - 项目仓库：\`${HOMEPAGE}\`
+
+          安装命令：
+
+          \`\`\`bash
+          brew install gqy20/tap/${FNAME}
+          \`\`\`
+
+          FORMULAENTRY
+          done
+
+          cat >> README.md <<'FOOTER'
+
+          ## 维护说明
+
+          此 tap 由 GitHub Actions 自动更新。维护和发布流程见 \`docs/maintainer.md\`。
+          FOOTER
+
+          echo "README.md regenerated"
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore: update formulas to latest releases"
+          title: "chore: update formulas to latest releases"
+          body: |
+            Auto-generated PR from the formula update workflow.
+
+            ## Changes
+            ${{ steps.latest_release.outputs.version != steps.current_version.outputs.version && format('Updated `{0}`: `{1}` → `{2}`', matrix.formula, steps.current_version.outputs.version, steps.latest_release.outputs.version) || 'No changes detected' }}
+
+            ## Verification
+            - Check that all `sha256` values match the upstream `checksums.txt`
+            - Run `brew install --build-from-source` on each platform to verify
+          branch: auto-update/formulas
+          delete-branch: true
+          labels: automated
