@@ -192,10 +192,10 @@ jobs:
           echo "README.md regenerated"
 
       - name: Commit and push changes
-        if: steps.latest_release.outputs.version != steps.current_version.outputs.version
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+          git diff --quiet && exit 0
           git add Formula/${{ matrix.formula }}.rb README.md
-          git commit -m "chore: update ${{ matrix.formula }} to ${{ steps.latest_release.outputs.version }}"
+          git commit -m "chore: update ${{ matrix.formula }}"
           git push
