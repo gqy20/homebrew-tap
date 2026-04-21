@@ -198,4 +198,5 @@ jobs:
           git diff --quiet && exit 0
           git add Formula/${{ matrix.formula }}.rb README.md
           git commit -m "chore: update ${{ matrix.formula }}"
+          git pull --rebase origin main || true
           git push
