@@ -191,22 +191,11 @@ jobs:
 
           echo "README.md regenerated"
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v7
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: "chore: update formulas to latest releases"
-          title: "chore: update formulas to latest releases"
-          body: |
-            Auto-generated PR from the formula update workflow.
-
-            ## Changes
-            ${{ steps.latest_release.outputs.version != steps.current_version.outputs.version && format('Updated `{0}`: `{1}` → `{2}`', matrix.formula, steps.current_version.outputs.version, steps.latest_release.outputs.version) || 'No changes detected' }}
-
-            ## Verification
-            - Check that all `sha256` values match the upstream `checksums.txt`
-            - Run `brew install --build-from-source` on each platform to verify
-          branch: auto-update/formulas
-          delete-branch: true
-          labels: automated
-          auto-merge: true
+      - name: Commit and push changes
+        if: steps.latest_release.outputs.version != steps.current_version.outputs.version
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add Formula/${{ matrix.formula }}.rb README.md
+          git commit -m "chore: update ${{ matrix.formula }} to ${{ steps.latest_release.outputs.version }}"
+          git push
