@@ -209,3 +209,4 @@ jobs:
           branch: auto-update/formulas
           delete-branch: true
           labels: automated
+          auto-merge: true
