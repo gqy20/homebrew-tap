@@ -2,27 +2,27 @@ class Zotcli < Formula
   desc "Zotero CLI for terminal, scripts, and AI agents"
   homepage "https://github.com/gqy20/zotero_cli"
   license "MIT"
-  version "v0.0.7"
+  version "v0.0.8"
 
   on_macos do
     on_intel do
-      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.7/zot_v0.0.7_darwin_amd64.tar.gz"
-      sha256 "0a61421d7f27b8916b97bba3e1dce959e84df75c44857258eb1d43fe488f3809"
+      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.8/zot_v0.0.8_darwin_amd64.tar.gz"
+      sha256 "914bcfa1710a8b73bf35b833fb8b1d6a8f8d9574ed1cc1a2e89d2156d68fb15f"
     end
     on_arm do
-      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.7/zot_v0.0.7_darwin_arm64.tar.gz"
-      sha256 "46641b7204e12d26e2b970678021f18682d68e22ecff9902fb39d9760d08360c"
+      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.8/zot_v0.0.8_darwin_arm64.tar.gz"
+      sha256 "67f640ac84b60c2a8a8ebc6d3423bc4925a2c0f4d404b3ea5a1f6208595bd8c7"
     end
   end
 
   on_linux do
     on_intel do
-      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.7/zot_v0.0.7_linux_amd64.tar.gz"
-      sha256 "f8efc8aada2da513f35dc1ac104b4dfbbf68327e52ac38bf5925961e1d9413b7"
+      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.8/zot_v0.0.8_linux_amd64.tar.gz"
+      sha256 "e667082fa47d949deebb7df7f0e96ff1df5680d52d3bbfc9c9fb44841f73aa25"
     end
     on_arm do
-      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.7/zot_v0.0.7_linux_arm64.tar.gz"
-      sha256 "46cc3dbe527bdb721a39023e3a532075ec7d942bc00141cdfc393e8b1346400a"
+      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.8/zot_v0.0.8_linux_arm64.tar.gz"
+      sha256 "a6404c487b8a5a18f2c62c15609998d09a28612a6dae9f8e61ef1d940eec9694"
     end
   end
 
