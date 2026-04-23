@@ -60,11 +60,14 @@ jobs:
           echo "Current version in ${{ matrix.formula }}.rb: $CURRENT"
 
       - name: Skip if already up-to-date
+        id: skip_check
         if: steps.latest_release.outputs.version == steps.current_version.outputs.version
         run: |
           echo "::notice::${{ matrix.formula }} is already at latest version (${{ steps.latest_release.outputs.version }}). Skipping."
+          echo "needs_update=false" >> "$GITHUB_OUTPUT"
 
       - name: Download checksums and update formula
+        id: update_formula
         if: steps.latest_release.outputs.version != steps.current_version.outputs.version
         env:
           NEW_VERSION: ${{ steps.latest_release.outputs.version }}
@@ -138,8 +141,10 @@ jobs:
           RUBYEOF
 
           echo "Updated ${FORMULA}.rb to version ${NEW_VERSION}"
+          echo "needs_update=true" >> "$GITHUB_OUTPUT"
 
       - name: Generate README.md
+        if: steps.update_formula.outputs.needs_update == 'true'
         run: |
           cat > README.md <<'HEADER'
           # homebrew-tap
@@ -192,11 +197,21 @@ jobs:
           echo "README.md regenerated"
 
       - name: Commit and push changes
+        if: steps.update_formula.outputs.needs_update == 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git diff --quiet && exit 0
           git add Formula/${{ matrix.formula }}.rb README.md
           git commit -m "chore: update ${{ matrix.formula }}"
-          git pull --rebase origin main || true
-          git push
+          for i in $(seq 1 3); do
+            git pull --rebase origin main || true
+            if git push; then
+              echo "Push succeeded on attempt $i"
+              exit 0
+            fi
+            echo "Push attempt $i failed, retrying in ${i}s..."
+            sleep "${i}"
+          done
+          echo "All push attempts failed"
+          exit 1
