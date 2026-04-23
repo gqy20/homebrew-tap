@@ -30,7 +30,7 @@ brew install gqy20/tap/ms
 
 Zotero CLI for terminal, scripts, and AI agents
 
-- 版本：`v0.0.7`
+- 版本：`v0.0.8`
 - 安装后的命令：`zot`
 - 项目仓库：`https://github.com/gqy20/zotero_cli`
 
