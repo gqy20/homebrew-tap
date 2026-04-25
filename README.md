@@ -4,12 +4,11 @@
 
 ## 安装
 
-\`\`\`bash
+```bash
 brew tap gqy20/tap
-\`\`\`
+```
 
 ## 可用 Formula
-
 
 ### `ms`
 
@@ -25,7 +24,6 @@ MiniMax Studio CLI - AI video generation toolkit
 brew install gqy20/tap/ms
 ```
 
-
 ### `zotcli`
 
 Zotero CLI for terminal, scripts, and AI agents
@@ -40,7 +38,6 @@ Zotero CLI for terminal, scripts, and AI agents
 brew install gqy20/tap/zotcli
 ```
 
-
 ## 维护说明
 
-此 tap 由 GitHub Actions 自动更新。维护和发布流程见 \`docs/maintainer.md\`。
+此 tap 由 GitHub Actions 自动更新。维护和发布流程见 `docs/maintainer.md`。

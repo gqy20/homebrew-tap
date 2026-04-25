@@ -108,7 +108,7 @@ jobs:
               arm64) SUBBLOCK="on_arm" ;;
             esac
 
-            ASSET_NAME="${BINARY}_v${NEW_VERSION}_${OS}_${ARCH}.tar.gz"
+            ASSET_NAME="${BINARY}_${NEW_VERSION}_${OS}_${ARCH}.tar.gz"
             ASSET_URL="https://github.com/$REPO/releases/download/$NEW_VERSION/$ASSET_NAME"
 
             SHA256=$(awk -v name="$ASSET_NAME" '$2 == name {print $1}' /tmp/checksums.txt)
@@ -153,9 +153,9 @@ jobs:
 
           ## 安装
 
-          \`\`\`bash
+          ```bash
           brew tap gqy20/tap
-          \`\`\`
+          ```
 
           ## 可用 Formula
 
@@ -180,9 +180,9 @@ jobs:
 
           安装命令：
 
-          \`\`\`bash
+          ```bash
           brew install gqy20/tap/${FNAME}
-          \`\`\`
+          ```
 
           FORMULAENTRY
           done
@@ -191,7 +191,7 @@ jobs:
 
           ## 维护说明
 
-          此 tap 由 GitHub Actions 自动更新。维护和发布流程见 \`docs/maintainer.md\`。
+          此 tap 由 GitHub Actions 自动更新。维护和发布流程见 `docs/maintainer.md`。
           FOOTER
 
           echo "README.md regenerated"
