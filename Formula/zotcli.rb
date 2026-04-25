@@ -7,22 +7,22 @@ class Zotcli < Formula
   on_macos do
     on_intel do
       url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.9/zot_v0.0.9_darwin_amd64.tar.gz"
-      sha256 "0370be8cd8daacd1aaf968a2b44502fc1861e0210828e3843628bf9f25aa67b5"
+      sha256 "634fecebef0646e0d8802fec4eb12e077fcf6636295a719ab93b77e010d3ad25"
     end
     on_arm do
       url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.9/zot_v0.0.9_darwin_arm64.tar.gz"
-      sha256 "8332f477d217ece13bb99f0a5014989d7026550015d7df089f17c159417200da"
+      sha256 "0db4434ea1b4cee3f32dae34b80d2a3c9346ae6ef59ad947adeb33b668179273"
     end
   end
 
   on_linux do
     on_intel do
       url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.9/zot_v0.0.9_linux_amd64.tar.gz"
-      sha256 "a77e3850b0837854d4d2df547cbf63021c9b4d1b8dbd8f5d762344e74c7fff7d"
+      sha256 "06c5c6f630e2effdd55d2529d7513707c35b74411ec670d41bf3d12d2dc6d34b"
     end
     on_arm do
       url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.9/zot_v0.0.9_linux_arm64.tar.gz"
-      sha256 "e39b0e35c1cc1d3b6de97edf97e6b0560f7d942a5e83cb88cd63adc2fa63498d"
+      sha256 "a051c59e3efb2378fa541ff42c0b4da026fa4fba430d910b70e45621afb72826"
     end
   end
 
