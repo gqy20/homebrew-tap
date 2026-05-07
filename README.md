@@ -28,7 +28,7 @@ MiniMax Studio CLI - AI video generation toolkit
 
 Zotero CLI for terminal, scripts, and AI agents
 
-- 版本：`v0.0.9`
+- 版本：`v0.0.10`
 - 安装后的命令：`zot`
 - 项目仓库：`https://github.com/gqy20/zotero_cli`
 
