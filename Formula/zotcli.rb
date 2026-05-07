@@ -2,41 +2,35 @@ class Zotcli < Formula
   desc "Zotero CLI for terminal, scripts, and AI agents"
   homepage "https://github.com/gqy20/zotero_cli"
   license "MIT"
-  version "v0.0.9"
+  version "0.0.10"
 
   on_macos do
     on_intel do
-      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.9/zot_v0.0.9_darwin_amd64.tar.gz"
-      sha256 "634fecebef0646e0d8802fec4eb12e077fcf6636295a719ab93b77e010d3ad25"
+      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.10/zot_v0.0.10_darwin_amd64.tar.gz"
+      sha256 "6282d096d2d5806afad992dc1f61166cbb666db4c403e3dc14561514151b21c6"
     end
-  end
-
-  on_macos do
     on_arm do
-      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.9/zot_v0.0.9_darwin_arm64.tar.gz"
-      sha256 "0db4434ea1b4cee3f32dae34b80d2a3c9346ae6ef59ad947adeb33b668179273"
+      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.10/zot_v0.0.10_darwin_arm64.tar.gz"
+      sha256 "b89c5c6794cdf1272375d2ba7eef7da5c63730565dd9051546c40cc2bbcf2dc6"
     end
   end
 
   on_linux do
     on_intel do
-      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.9/zot_v0.0.9_linux_amd64.tar.gz"
-      sha256 "06c5c6f630e2effdd55d2529d7513707c35b74411ec670d41bf3d12d2dc6d34b"
+      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.10/zot_v0.0.10_linux_amd64.tar.gz"
+      sha256 "ba141d4baec7a458c1cec2cda2ac9fd6a7ae6e702191ba472de1ca1f62d5b2c7"
     end
-  end
-
-  on_linux do
     on_arm do
-      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.9/zot_v0.0.9_linux_arm64.tar.gz"
-      sha256 "a051c59e3efb2378fa541ff42c0b4da026fa4fba430d910b70e45621afb72826"
+      url "https://github.com/gqy20/zotero_cli/releases/download/v0.0.10/zot_v0.0.10_linux_arm64.tar.gz"
+      sha256 "f334edec7e478badcb5bd6daf16b7194383a63da22173aaee725beeef3ab921a"
     end
   end
 
   def install
-    bin.install "zot"
+    bin.install Dir["**/zot"].first
   end
 
   test do
-    assert_match "zot", shell_output("\#{bin}/zot --help")
+    assert_match "zot", shell_output("#{bin}/zot --help")
   end
 end
